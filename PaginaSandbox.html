@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Simulador de Física - Sandbox</title>
+</head>
+<body>
+
+    <!-- Cabeçalho --> 
+    <header>
+
+        <button id="BotaoCriar">+</button>
+
+        <section id="ControlesPropriedades">
+            <input type="number" id="InputMassa" placeholder="Massa (Kg)" >
+            <input type="number" id="InputAtrito" placeholder="Atrito (μ)" >
+        </section>
+
+        <div id="PreVisualizacao"></div>
+
+        <section id="ControlesPersonalizacao">
+            <select id="SelectCor" onchange="PreVisualizacao()">
+
+                <option value="" disabled selected hidden>Cor</option>
+
+                <optgroup label="Cores Padrão">
+                    <option value="black">Preto</option>
+                    <option value="gray">Cinza</option>
+                    <option value="red">Vermelho</option>
+                    <option value="blue">Azul</option>
+                    <option value="green">Verde</option>
+                    <option value="yellow">Amarelo</option>
+                    <option value="orange">Laranja</option>
+                    <option value="purple">Roxo</option>
+                    <option value="pink">Rosa</option>
+                    <option value="cyan">Ciano</option>
+                    <option value="coral">Coral</option>
+                    <option value="gold">Ouro</option>
+                    <option value="silver">Prata</option>
+                    <option value="teal">Verde-azulado</option>
+                    <option value="navy">Azul-marinho</option>
+                    <option value="maroon">Vinho</option>
+                    <option value="olive">Oliva</option>
+                    <option value="lime">Lima</option>
+                </optgroup>
+
+                <optgroup label="Cores Escuras">
+                    <option value="darkgray">Cinza Escuro</option>
+                    <option value="darkred">Vermelho Escuro</option>
+                    <option value="darkblue">Azul Escuro</option>
+                    <option value="darkgreen">Verde Escuro</option>
+                    <option value="darkkhaki">Caqui Escuro</option>
+                    <option value="darkorange">Laranja Escuro</option>
+                    <option value="indigo">Índigo</option>
+                    <option value="deeppink">Rosa Profundo</option>
+                    <option value="darkcyan">Ciano Escuro</option>
+                </optgroup>
+
+                <optgroup label="Cores Claras">
+                    <option value="lightgray">Cinza Claro</option>
+                    <option value="lightcoral">Coral Claro</option>
+                    <option value="lightblue">Azul Claro</option>
+                    <option value="lightgreen">Verde Claro</option>
+                    <option value="lightyellow">Amarelo Claro</option>
+                    <option value="peachpuff">Pêssego Claro</option>
+                    <option value="plum">Ameixa Claro</option>
+                    <option value="lightpink">Rosa Claro</option>
+                    <option value="lightcyan">Ciano Claro</option>
+                </optgroup>
+
+            </select>
+
+            <select id="SelectTextura" onchange="PreVisualizacao()">
+
+                <option value="" disabled selected hidden>Textura</option>
+
+                <option value="none">Padrão</option>
+                <option value="arquivos/texturas/madeira.jpg">Madeira</option>
+                <option value="arquivos/texturas/metal.jpg">Metal</option>
+                <option value="arquivos/texturas/pedra.jpg">Pedra</option>
+                <option value="arquivos/texturas/tecido.jpg">Tecido</option>
+                <option value="arquivos/texturas/marmore.jpg">Mármore</option>
+                <option value="arquivos/texturas/tijolo.jpg">Tijolo</option>
+                <option value="arquivos/texturas/areia.jpg">Areia</option>
+                <option value="arquivos/texturas/agua.jpg">Água</option>
+            </select>
+        </section>
+
+        <section id="ControlesDiversos">
+            <button id="BotaoResetar">Resetar</button>
+            <button id="BotaoConfiguracoes">Config.</button>
+        </section>
+
+        <button id="BotaoDeletar">-</button>
+
+        <section id="ControlesManipulacao">
+            <button id="BotaoSelecionar" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/selecionar.png" alt="icone de seleção"> </button>
+
+            <button id="BotaoMover" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/mover.png" alt="icone de mover"> </button> <br>
+
+            <button id="BotaoRedimensionar" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/dimencionar.png" alt="icone de redimencionar"> </button>
+
+            <button id="BotaoVisualizar" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/visualizar.png" alt="icone de visualizar"> </button>
+        </section>
+
+    </header>
+
+    <!-- Área simulada -->
+    <main>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>Simulador de Física - 2026</p>
+        <a href="index.html">>> Sair</a>
+    </footer>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
