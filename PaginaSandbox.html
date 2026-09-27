@@ -74,7 +74,7 @@
 
             <select id="SelectTextura" onchange="PreVisualizar()">
 
-                <option value="" disabled selected hidden>Textura</option>
+                <option value="none" disabled selected hidden>Textura</option>
 
                 <option value="none">Padrão</option>
                 <option value="arquivos/texturas/madeira.jpg">Madeira</option>
@@ -108,11 +108,7 @@
     </header>
 
     <!-- Área simulada -->
-    <canvas id="AreaSimulada" onmouseover="PermitirInteracao()" onmouseout="BloquearInteracao()">
-
-        
-
-    </canvas>
+    <canvas id="AreaSimulada" onmouseover="InteragirSandbox()" onmouseout="NaoInteragirSandbox()" onclick="Clicou()" ondblclick="DblClicada()" onmouseup="LiberouClique()"></canvas>
 
     <!-- Rodapé -->
     <footer>
