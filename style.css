@@ -20,7 +20,8 @@ header {
     gap: 10px;
 }
 
-main {
+#AreaSimulada {
+    display: fixed;
     flex: 1;
 }
 

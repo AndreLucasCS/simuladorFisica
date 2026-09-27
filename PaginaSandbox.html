@@ -11,17 +11,17 @@
     <!-- Cabeçalho --> 
     <header>
 
-        <button id="BotaoCriar">+</button>
+        <button id="BotaoCriar" onclick="CriarPeca()">+</button>
 
         <section id="ControlesPropriedades">
-            <input type="number" id="InputMassa" placeholder="Massa (Kg)" >
-            <input type="number" id="InputAtrito" placeholder="Atrito (μ)" >
+            <input type="number" id="InputMassa" placeholder="Massa (Kg)" min="0" step="5">
+            <input type="number" id="InputAtrito" placeholder="Atrito (μ)" min="0" step="0.01">
         </section>
 
         <div id="PreVisualizacao"></div>
 
         <section id="ControlesPersonalizacao">
-            <select id="SelectCor" onchange="PreVisualizacao()">
+            <select id="SelectCor" onchange="PreVisualizar()">
 
                 <option value="" disabled selected hidden>Cor</option>
 
@@ -72,7 +72,7 @@
 
             </select>
 
-            <select id="SelectTextura" onchange="PreVisualizacao()">
+            <select id="SelectTextura" onchange="PreVisualizar()">
 
                 <option value="" disabled selected hidden>Textura</option>
 
@@ -89,7 +89,7 @@
         </section>
 
         <section id="ControlesDiversos">
-            <button id="BotaoResetar">Resetar</button>
+            <button id="BotaoResetar" onclick="location.reload()">Resetar</button>
             <button id="BotaoConfiguracoes">Config.</button>
         </section>
 
@@ -108,9 +108,11 @@
     </header>
 
     <!-- Área simulada -->
-    <main>
+    <canvas id="AreaSimulada" onmouseover="PermitirInteracao()" onmouseout="BloquearInteracao()">
 
-    </main>
+        
+
+    </canvas>
 
     <!-- Rodapé -->
     <footer>
