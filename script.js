@@ -7,6 +7,7 @@
 */
 
 
+
 // ===============================================================================
 
 // VARIÁVEIS E ARRAYS GLOBAIS:
@@ -15,6 +16,7 @@
 
 
 // Objetos do DOM ~~~~~~~~~~~~~~~~~~~~~~
+const Cabecalho = document.getElementById("Cabecalho");
 const BotaoCriar = document.getElementById("BotaoCriar");
 const InputMassa = document.getElementById("InputMassa");
 const InputAtrito = document.getElementById("InputAtrito");
@@ -35,6 +37,7 @@ const g = 9.81; // Aceleração da gravidade (m/s²)
 // Estados do simulador ~~~~~~~~~~~~~~~~~~~~~
 let modo = "selecionar"; // "selecionar", "mover", "redimensionar", "criar" ...
 let interacaoAtiva = false;
+let blocosInclicaveis = true; 
 
 // eventos ~~~~~~~~~~~~~~~~~~~
 let clique = false;
@@ -129,77 +132,6 @@ function RedimensionarPeca() { modo = "redimensionar";
 }
 
 
-// Funções de atualização da renderização e recalculação do motor de física ~~~~~~~~~~~~~~~~~~~~
-function recalcularMotorFisico() {
-
-    // recalculando a posição de todos os objetos da lista (array) de peças
-    for (let i = 0; i < pecas.length; i++) {
-        
-        // tratando a peca de maneira diferente se ela for a selecionada
-        if (i === pecaSelecionada) {
-            
-            // verificando se o modo é "mover" para move-la
-            if (modo === "mover") {
-
-                pecas[i].position.x = mouseX - (pecas[i].width / 2)
-                pecas[i].position.y = mouseY - (pecas[i].height / 2)
-
-                if (clique) {
-                    modo = "selecionar"
-                }
-
-            }
-        }
-
-    }
-
-}
-
-function redesenharTela() {
-    
-    for (let i = 0; i < pecas.length; i++) {
-        
-        let pecaCriada = document.createElement("div");
-
-        pecaCriada.style.position = "absolute"
-        pecaCriada.style.top = `${pecas[i].position.y + 60}px`;
-        pecaCriada.style.left = `${pecas[i].position.x}px`;
-        pecaCriada.style.width = `${pecas[i].width}px`;
-        pecaCriada.style.height = `${pecas[i].height}px`;
-        pecaCriada.style.backgroundColor = pecas[i].cor;
-        if (pecas[i].textura !== "none") {
-            pecaCriada.style.backgroundImage = `url(${pecas[i].textura})`;}
-        pecaCriada.style.backgroundBlendMode = "multiply";
-
-        AreaSimulada.appendChild(pecaCriada);
-        
-    }
-
-}
-
-function limpandoTela() {
-    AreaSimulada.replaceChildren()
-    redesenharTela()
-}
-
-function atualizarSimulador() {
-
-    recalcularMotorFisico()
-    limpandoTela()
-
-    requestAnimationFrame(atualizarSimulador);
-
-}
-
-
-// Funções diversas ~~~~~~~~~~~~~~~~~~~~
-function PreVisualizar() {
-    PreVisualizacao.style.backgroundColor = SelectCor.value;
-    PreVisualizacao.style.backgroundImage = SelectTextura.value ? `url(${SelectTextura.value})` : "none";
-    PreVisualizacao.style.backgroundBlendMode = "multiply";
-};
-
-
 // Funções de interação com o sandbox ~~~~~~~~~~~~~~~~
 function InteragirSandbox() {
     interacaoAtiva = true;
@@ -225,7 +157,90 @@ function LiberouClique() {
     }, 100);
 }
 
+function ClicouPeca() {
+    console.log("Clicou na peça! **************************************")
+}
 
+
+// Funções de atualização da renderização e recalculação do motor de física ~~~~~~~~~~~~~~~~~~~~
+function recalcularMotorFisico() {
+
+    // recalculando a posição de todos os objetos da lista (array) de peças
+    for (let i = 0; i < pecas.length; i++) {
+        
+        // tratando a peca de maneira diferente se ela for a selecionada
+        if (i === pecaSelecionada) {
+            
+            // verificando se o modo é "mover" para move-la
+            if (modo === "mover") {
+
+                pecas[i].position.x = mouseX - (pecas[i].width / 2);
+                pecas[i].position.y = mouseY - (pecas[i].height / 2) - Cabecalho.offsetHeight;
+
+                if (clique) {
+                    modo = "selecionar";
+                }
+
+            }
+        }
+
+    }
+
+}
+
+function redesenharTela() {
+    
+    for (let i = 0; i < pecas.length; i++) {
+        
+        let pecaCriada = document.createElement("div");
+
+        pecaCriada.style.position = "absolute"
+        pecaCriada.style.top = `${pecas[i].position.y}px`;
+        pecaCriada.style.left = `${pecas[i].position.x}px`;
+        pecaCriada.style.width = `${pecas[i].width}px`;
+        pecaCriada.style.height = `${pecas[i].height}px`;
+        pecaCriada.style.backgroundColor = pecas[i].cor;
+        pecaCriada.style.backgroundBlendMode = "multiply";
+        pecaCriada.addEventListener("click", ClicouPeca);
+
+        if (pecas[i].textura !== "none") {
+            pecaCriada.style.backgroundImage = `url(${pecas[i].textura})`; 
+            pecaCriada.style.backgroundRepeat = "repeat";
+        };
+
+        if (blocosInclicaveis === true) {
+            pecaCriada.style.pointerEvents = "none";
+        };
+
+        AreaSimulada.appendChild(pecaCriada);
+        
+    }
+
+}
+
+function limpandoTela() {
+    AreaSimulada.replaceChildren()
+    redesenharTela()
+}
+
+function atualizarSimulador() {
+
+    recalcularMotorFisico()
+    limpandoTela()
+
+    requestAnimationFrame(atualizarSimulador);
+
+}
+
+
+
+
+// Funções diversas ~~~~~~~~~~~~~~~~~~~~
+function PreVisualizar() {
+    PreVisualizacao.style.backgroundColor = SelectCor.value;
+    PreVisualizacao.style.backgroundImage = SelectTextura.value ? `url(${SelectTextura.value})` : "none";
+    PreVisualizacao.style.backgroundBlendMode = "multiply";
+};
 
 
 requestAnimationFrame(atualizarSimulador);

@@ -11,7 +11,7 @@ body {
     flex-direction: column;
 }
 
-header {
+#Cabecalho {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -21,7 +21,7 @@ header {
 }
 
 #AreaSimulada {
-    display: fixed;
+    position: relative;
     flex: 1;
 }
 

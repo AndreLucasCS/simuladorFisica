@@ -9,7 +9,7 @@
 <body>
 
     <!-- Cabeçalho --> 
-    <header>
+    <header id="Cabecalho">
 
         <button id="BotaoCriar" onclick="CriarPeca()">+</button>
 
@@ -108,10 +108,10 @@
     </header>
 
     <!-- Área simulada -->
-    <canvas id="AreaSimulada" onmouseover="InteragirSandbox()" onmouseout="NaoInteragirSandbox()" onclick="Clicou()" ondblclick="DblClicada()" onmouseup="LiberouClique()"></canvas>
+    <div id="AreaSimulada" onmouseover="InteragirSandbox()" onmouseout="NaoInteragirSandbox()" onclick="Clicou()" ondblclick="DblClicada()" onmouseup="LiberouClique()"></div>
 
     <!-- Rodapé -->
-    <footer>
+    <footer id="footer">
         <p>Simulador de Física - 2026</p>
         <a href="index.html">>> Sair</a>
     </footer>
