@@ -37,7 +37,7 @@ const g = 9.81; // Aceleração da gravidade (m/s²)
 // Estados do simulador ~~~~~~~~~~~~~~~~~~~~~
 let modo = "selecionar"; // "selecionar", "mover", "redimensionar", "criar" ...
 let interacaoAtiva = false;
-let blocosInclicaveis = true; 
+let estiloCursor = "auto"
 
 // eventos ~~~~~~~~~~~~~~~~~~~
 let clique = false;
@@ -64,70 +64,26 @@ let pecas = [];
 
 
 
-// Funções de criação e descarte de peças ~~~~~~~~~~~~~~~~~~~~
-function CriarPeca() { modo = "criar"; // Definindo o sistema para o modo de criação de peças
-    
-    // **** "essa função apenas cria um objeto representando a nova peça. A peça não será desenhada ainda" ****
-
-    // verifica se a massa foi definida
-    if (InputMassa.value && InputMassa.value > 0) {
-
-
-        // cria um objeto representando a nova peça
-        let novaPecaObjt = {
-
-            // propriedades personalizadas:
-            massa: parseFloat(InputMassa.value),
-            atrito: parseFloat(InputAtrito.value) || 0,
-            cor: SelectCor.value || "black",
-            textura: SelectTextura.value || null,
-
-            // propriedades físicas:
-            position: { x: 100, y: 100 }, // posição inicial (px)
-            Fr: { x: 0, y: 0 }, // força resultante (N)
-            V: { x: 0, y: 0 }, // velocidade (m/s²)
-
-            // proporções:
-            width: 60, // comprimento (px)
-            height: 60, // altura (px)
-
-        }
-
-        // adiciona a nova peça ao array de peças
-        pecas.push(novaPecaObjt);
-        console.log("Peça criada:", novaPecaObjt);
-        console.log("Array de peças:", pecas);
-        
-
-        // trocar para o modo "mover" para deslocar a peca criada
-        modo = "mover";
-        pecaSelecionada = pecas.length-1;
-
-        
-    } else {
-        alert("Por favor, defina a massa antes de criar uma peça.");
-        modo = "selecionar";
-        return;
-    }
-    
-};
-
-function DeletarPeca() { modo = "deletar";
-    
-};
-
 // Funções de manipulação de peças ~~~~~~~~~~~~~~~~~~~~
 function SelecionarPeca() { modo = "selecionar";
-    
+
+    console.log("Modo selecionar -------------------")
+    estiloCursor = "default";
+
 }
 
 function MoverPeca() { modo = "mover";
-    
 
+    console.log("Modo mover -------------------")
+    pecaSelecionada = null;
+    estiloCursor = "grab";
 
 }
 
 function RedimensionarPeca() { modo = "redimensionar";
+
+    console.log("Modo redimencionar -------------------")
+    estiloCursor = "move";
     
 }
 
@@ -135,12 +91,10 @@ function RedimensionarPeca() { modo = "redimensionar";
 // Funções de interação com o sandbox ~~~~~~~~~~~~~~~~
 function InteragirSandbox() {
     interacaoAtiva = true;
-    AreaSimulada.style.cursor = "pointer";
 }
 
 function NaoInteragirSandbox() {
     interacaoAtiva = false;
-    AreaSimulada.style.cursor = "default";
 }
 
 function Clicou() {
@@ -158,11 +112,85 @@ function LiberouClique() {
 }
 
 function ClicouPeca() {
-    console.log("Clicou na peça! **************************************")
 }
 
 
+// Funções de criação e descarte de peças ~~~~~~~~~~~~~~~~~~~~
+function CriarPeca() { modo = "criar"; // Definindo o sistema para o modo de criação de peças
+
+    // verifica se a massa foi definida antes de iniciar o processo 
+    if (InputMassa.value && InputMassa.value > 0) {
+
+
+        // criando um objeto representante da nova peça
+        let novaPecaObjt = {
+
+            // propriedades personalizadas:
+            massa: parseFloat(InputMassa.value),
+            atrito: parseFloat(InputAtrito.value) || 0,
+            cor: SelectCor.value || "black",
+            textura: SelectTextura.value || null,
+
+            // propriedades físicas:
+            position: { x: 100, y: 100 }, // posição inicial (px)
+            Fr: { x: 0, y: 0 }, // força resultante (N)
+            V: { x: 0, y: 0 }, // velocidade (m/s²)
+
+            // proporções:
+            width: 100, // comprimento (px)
+            height: 75, // altura (px)
+
+        }
+
+        // adiciona a nova peça ao array de peças
+        pecas.push(novaPecaObjt);
+        console.log("Peça criada:", novaPecaObjt);
+        console.log("Array de peças:", pecas);
+
+
+        // desenhando a peça como objeto DOM
+        let pecaCriada = document.createElement("div");
+
+        // ajustando suas propriedades
+        pecaCriada.style.position = "absolute"
+        pecaCriada.style.top = `${novaPecaObjt.position.y}px`;
+        pecaCriada.style.left = `${novaPecaObjt.position.x}px`;
+        pecaCriada.style.width = `${novaPecaObjt.width}px`;
+        pecaCriada.style.height = `${novaPecaObjt.height}px`;
+        pecaCriada.style.backgroundColor = novaPecaObjt.cor;
+        pecaCriada.style.backgroundBlendMode = "multiply";
+        pecaCriada.style.pointerEvents = "none";
+        pecaCriada.addEventListener("click", ClicouPeca);
+        if (novaPecaObjt.textura) {
+            pecaCriada.style.backgroundImage = `url(${novaPecaObjt.textura})`; 
+            pecaCriada.style.backgroundRepeat = "repeat";
+            console.log("textura:", novaPecaObjt.textura)
+        };
+
+        // inserindo ela na área simulada
+        AreaSimulada.appendChild(pecaCriada);
+
+
+        // trocar para o modo "mover" para deslocar a peca criada
+        MoverPeca()
+        pecaSelecionada = pecas.length-1;
+
+    } else {
+        alert("Por favor, defina a massa antes de criar uma peça.");
+        SelecionarPeca();
+        return;
+    }
+    
+};
+
+function DeletarPeca() { modo = "deletar";
+    
+};
+
+
 // Funções de atualização da renderização e recalculação do motor de física ~~~~~~~~~~~~~~~~~~~~
+
+// **** "Essa função recalcula a posição das peças apartir do motor de física do simulador" ****
 function recalcularMotorFisico() {
 
     // recalculando a posição de todos os objetos da lista (array) de peças
@@ -174,11 +202,13 @@ function recalcularMotorFisico() {
             // verificando se o modo é "mover" para move-la
             if (modo === "mover") {
 
+                estiloCursor = "grabbing";
                 pecas[i].position.x = mouseX - (pecas[i].width / 2);
                 pecas[i].position.y = mouseY - (pecas[i].height / 2) - Cabecalho.offsetHeight;
 
                 if (clique) {
-                    modo = "selecionar";
+                    MoverPeca();
+                    return
                 }
 
             }
@@ -188,46 +218,32 @@ function recalcularMotorFisico() {
 
 }
 
+// **** "Essa função é responsável por traduzir todos as informações matemáticas em algo visível e interagível pelos usuários" ****
 function redesenharTela() {
     
     for (let i = 0; i < pecas.length; i++) {
         
-        let pecaCriada = document.createElement("div");
-
-        pecaCriada.style.position = "absolute"
-        pecaCriada.style.top = `${pecas[i].position.y}px`;
-        pecaCriada.style.left = `${pecas[i].position.x}px`;
-        pecaCriada.style.width = `${pecas[i].width}px`;
-        pecaCriada.style.height = `${pecas[i].height}px`;
-        pecaCriada.style.backgroundColor = pecas[i].cor;
-        pecaCriada.style.backgroundBlendMode = "multiply";
-        pecaCriada.addEventListener("click", ClicouPeca);
-
-        if (pecas[i].textura !== "none") {
-            pecaCriada.style.backgroundImage = `url(${pecas[i].textura})`; 
-            pecaCriada.style.backgroundRepeat = "repeat";
-        };
-
-        if (blocosInclicaveis === true) {
-            pecaCriada.style.pointerEvents = "none";
-        };
-
-        AreaSimulada.appendChild(pecaCriada);
+        // redefinindo posição e proporção
+        AreaSimulada.children[i].style.left = `${pecas[i].position.x}px`;
+        AreaSimulada.children[i].style.top = `${pecas[i].position.y}px`;
+        AreaSimulada.children[i].style.width = `${pecas[i].width}px`;
+        AreaSimulada.children[i].style.height = `${pecas[i].height}px`;
         
     }
 
+    // ajustando propriedades
+    AreaSimulada.style.cursor = estiloCursor
+
 }
 
-function limpandoTela() {
-    AreaSimulada.replaceChildren()
-    redesenharTela()
-}
 
+// **** "Essa função invoca as funções de redesenho e de recalculação em um loop rápido, atualizando o simulador" ****
 function atualizarSimulador() {
 
     recalcularMotorFisico()
-    limpandoTela()
+    redesenharTela()
 
+    // agendando ciclo
     requestAnimationFrame(atualizarSimulador);
 
 }
@@ -237,10 +253,24 @@ function atualizarSimulador() {
 
 // Funções diversas ~~~~~~~~~~~~~~~~~~~~
 function PreVisualizar() {
-    PreVisualizacao.style.backgroundColor = SelectCor.value;
-    PreVisualizacao.style.backgroundImage = SelectTextura.value ? `url(${SelectTextura.value})` : "none";
+
+    if (SelectCor && SelectCor.value) {
+        PreVisualizacao.style.backgroundColor = SelectCor.value;
+    }
+
+    if (SelectTextura && 
+        SelectTextura.value && 
+        SelectTextura.value !== "none" && 
+        SelectTextura.value !== "") {
+        
+        PreVisualizacao.style.backgroundImage = `url('${SelectTextura.value}')`;
+    } else {
+        PreVisualizacao.style.backgroundImage = "none";
+    }
+
     PreVisualizacao.style.backgroundBlendMode = "multiply";
-};
+
+}
 
 
 requestAnimationFrame(atualizarSimulador);

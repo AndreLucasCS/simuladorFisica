@@ -15,7 +15,7 @@
 
         <section id="ControlesPropriedades">
             <input type="number" id="InputMassa" placeholder="Massa (Kg)" min="0" step="5">
-            <input type="number" id="InputAtrito" placeholder="Atrito (μ)" min="0" step="0.01">
+            <input type="number" id="InputAtrito" placeholder="Atrito (μ)" min="0" step="0.05">
         </section>
 
         <div id="PreVisualizacao"></div>
@@ -96,11 +96,11 @@
         <button id="BotaoDeletar">-</button>
 
         <section id="ControlesManipulacao">
-            <button id="BotaoSelecionar" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/selecionar.png" alt="icone de seleção"> </button>
+            <button id="BotaoSelecionar" onclick="SelecionarPeca()" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/selecionar.png" alt="icone de seleção"> </button>
 
-            <button id="BotaoMover" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/mover.png" alt="icone de mover"> </button> <br>
+            <button id="BotaoMover" onclick="MoverPeca()" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/mover.png" alt="icone de mover"> </button> <br>
 
-            <button id="BotaoRedimensionar" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/dimencionar.png" alt="icone de redimencionar"> </button>
+            <button id="BotaoRedimensionar" onclick="RedimensionarPeca()" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/redimencionar.png" alt="icone de redimencionar"> </button>
 
             <button id="BotaoVisualizar" class="botoesManipulacao"> <img class="icone" src="arquivos/icones/visualizar.png" alt="icone de visualizar"> </button>
         </section>
